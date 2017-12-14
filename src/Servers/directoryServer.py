@@ -1,6 +1,3 @@
-# DirectoryServer.py
-# Project CS4032
-# Cathal Geoghegan
 
 import socket
 import re
@@ -21,7 +18,9 @@ class DirectoryServer(TCPServer):
     SLAVE_HEADER = "\nSLAVE_SERVER: %s\nPORT: %s"
     CREATE_DIR_REGEX = "CREATE_DIR: \nDIRECTORY: [a-zA-Z0-9_./]*\n\n"
     DELETE_DIR_REGEX = "DELETE_DIR: \nDIRECTORY: [a-zA-Z0-9_./]*\n\n"
-    DATABASE = "Database/directories.db"
+    #DATABASE = "Database/directories.db"
+    #DATABASE = "\\Database\\directories.db"
+    DATABASE = "D:\\1 TCD COURSEWORK\\Scalable Computing\\DFS\\CS4032-Distributed-File-System\\Database\\directories.db"
 
     def __init__(self, port_use=None):
         TCPServer.__init__(self, port_use, self.handler)
@@ -55,7 +54,7 @@ class DirectoryServer(TCPServer):
         # Get the list of slaves that have a copy of the file
         slave_string = self.get_slave_string(host, port)
         return_string = self.GET_RESPONSE % (host, port, filename, slave_string)
-        print return_string
+        print (return_string)
         con.sendall(return_string)
         return
 
@@ -165,8 +164,8 @@ def main():
         else:
             server = DirectoryServer()
         server.listen()
-    except socket.error, msg:
-        print "Unable to create socket connection: " + str(msg)
+    except socket.error as msg:
+        print ("Unable to create socket connection:" + str(msg))
         con = None
 
 

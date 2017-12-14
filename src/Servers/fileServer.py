@@ -108,9 +108,9 @@ def main():
             server = FileServer(port)
         else:
             server = FileServer()
-        server.listen()
-    except socket.error, msg:
-        print "Unable to create socket connection: " + str(msg)
+            server.listen()
+    except socket.error as msg:
+        print ("Unable to create socket connection: " + str(msg))
         con = None
 
 

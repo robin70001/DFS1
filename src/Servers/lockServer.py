@@ -17,7 +17,7 @@ class LockServer(TCPServer):
     UNLOCK_REGEX = "UNLOCK_FILE: [a-zA-Z0-9_./]*\n\n"
     LOCK_RESPONSE = "LOCK_RESPONSE: \nFILENAME: %s\nTIME: %d\n\n"
     FAIL_RESPONSE = "ERROR: %d\nMESSAGE: %s\n\n"
-    DATABASE = 'Database/locking.db'
+    DATABASE = "D:\\1 TCD COURSEWORK\\Scalable Computing\\DFS\\CS4032-Distributed-File-System\\Database\\locking.db"
 
     def __init__(self, port_use=None):
         TCPServer.__init__(self, port_use, self.handler)
@@ -113,8 +113,8 @@ def main():
         else:
             server = LockServer()
         server.listen()
-    except socket.error, msg:
-        print "Unable to create socket connection: " + str(msg)
+    except socket.error as msg:
+        print ("Unable to create socket connection: " + str(msg))
         con = None
 
 

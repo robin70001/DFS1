@@ -8,7 +8,7 @@ import os
 import re
 import threading
 import time
-import Queue
+import queue
 import base64
 
 # Regex used for the testing of the client proxy
@@ -20,7 +20,7 @@ LOCK_REGEX = "lock [a-zA-Z0-9_/.]* [0-9]*"
 
 class TCPClient:
     PORT = 8000
-    HOST = "0.0.0.0"
+    HOST = "127.0.0.1"
     DIR_PORT = 8005
     FILE_PORT = 8006
     LOCK_PORT = 8007
@@ -47,7 +47,7 @@ class TCPClient:
             self.port_use = port_use
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.open_files = {}
-        self.threadQueue = Queue.Queue()
+        self.threadQueue = queue.Queue()
 
     def open(self, filename):
         """Function opens a file by downloading from a remote server"""
@@ -115,7 +115,7 @@ class TCPClient:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         sock.connect((server, port))
-        sock.sendall(self.REQUEST % data)
+        sock.sendall(self.REQUEST % data.encode('utf-8'))
 
         # Loop until all data received
         while "\n\n" not in return_data:
@@ -201,7 +201,7 @@ class ThreadHandler(threading.Thread):
             self.handler(request)
             self.queue.task_done()
 
-    def handler(self, (con, addr)):
+    def handler(self, con, addr):
         message = ""
         # Loop and receive data
         while True:
@@ -212,7 +212,7 @@ class ThreadHandler(threading.Thread):
 
         # If valid http request with message body
         if len(message) > 0:
-            print "fffa"
+            print ("fffa")
             # Handle diff messages
         return
 
@@ -228,16 +228,19 @@ def main():
             con = TCPClient(port)
         else:
             con = TCPClient()
-    except socket.error, msg:
-        print "Unable to create socket connection: " + str(msg)
+    except socket.error: #, msg:
+        print ("Unable to create socket connection: ")# + str(msg)
         con = None
     while con:
-        user_input = raw_input("Enter a message to send or type exit:")
+        user_input = input("Enter a message to send or type exit:")
         if user_input.lower() == "exit":
             con = None
         elif re.match(UPLOAD_REGEX, user_input.lower()):
             request = user_input.lower()
             file_name = request.split()[1]
+            #file_name.encode(encoding='utf-8')
+            file_name = file_name.encode('utf-8')
+            print(file_name)
             con.open(file_name)
             con.write(file_name, data)
             con.close(file_name)
@@ -258,7 +261,7 @@ def main():
             con.close(file_name)
         else:
             data = con._TCPClient__raw_request(user_input)
-            print data
+            print (data)
 
 
 if __name__ == "__main__": main()

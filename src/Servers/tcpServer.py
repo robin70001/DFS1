@@ -4,7 +4,7 @@
 
 import socket
 import threading
-import Queue
+import queue
 import os
 import re
 import sys
@@ -28,8 +28,8 @@ class TCPServer(object):
         self.sock.bind((self.HOST, port_use))
         self.handler = handler if handler else self.default_handler
         # Create a queue of tasks with ma
-        self.threadQueue = Queue.Queue(maxsize=self.MAX_THREAD)
-
+        self.threadQueue = queue.Queue(maxsize=self.MAX_THREAD)
+        
         # Create thread pool
         for i in range(self.MAX_THREAD):
             thread = ThreadHandler(self.threadQueue, self.LENGTH, self)
@@ -50,7 +50,7 @@ class TCPServer(object):
             if not self.threadQueue.full():
                 self.threadQueue.put((con, addr))
             else:
-                print "Queue full closing connection from %s:%s" % (addr[0], addr[1])
+                print ("Queue full closing connection from %s:%s" % (addr[0], addr[1]))
                 con.close()
 
     def kill_serv(self, con):
@@ -70,7 +70,7 @@ class TCPServer(object):
         return_string = self.DEFAULT_RESPONSE
         con.sendall(return_string)
         # Default handler for everything else
-        print "Default"
+        print ("Default")
         return
 
     def send_request(self, data, server, port):
@@ -108,7 +108,7 @@ class ThreadHandler(threading.Thread):
             self.handler(request)
             self.queue.task_done()
 
-    def handler(self, (con, addr)):
+    def handler(self, con, addr):
         message = ""
         # Loop and receive data
         while "\n\n" not in message:
@@ -119,14 +119,14 @@ class ThreadHandler(threading.Thread):
         # If valid http request with message body
         if len(message) > 0:
             if message == "KILL_SERVICE\n":
-                print "Killing service"
+                print( "Killing service")
                 self.server.kill_serv(con)
             elif re.match(self.server.HELO_REGEX, message):
                 self.server.helo(con, addr, message)
             elif self.messageHandler(message, con, addr):
                 None
             else:
-                print message
+                print( message)
                 self.server.default(con, addr, message)
         return
 
@@ -139,8 +139,8 @@ def main():
         else:
             server = TCPServer()
         server.listen()
-    except socket.error, msg:
-        print "Unable to create socket connection: " + str(msg)
+    except socket.error as msg:
+        print ("Unable to create socket connection: "  + str(msg))
 
 
 if __name__ == "__main__": main()
