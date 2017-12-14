@@ -1,7 +1,7 @@
-CS4032-Distributed-File-System
+Distributed-File-System
 ==============================
 
-Distributed File System assignment for CS4032 Distributed Systems in Trinity College Dublin
+Distributed File System assignment for Scalable computing in Trinity College Dublin
 
 For this assignment I choose to implement
 * File Server
