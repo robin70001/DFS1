@@ -7,7 +7,7 @@ For this assignment I choose to implement
 * File Server
 * Directory Server
 * Lock Server
-* Replication
+* Authentication server
 
 File Server
 --------
@@ -34,7 +34,10 @@ tranferred using HTTPBasicAuth.
 
 Running
 --------
-To test this program the start.sh file will create all directories and databases required to run the servers. It will then 
-launch the directory, lock, and 3 file-servers. The client proxy in src/Client can then be used to access files.
+To test this program execute the following:
+directsrv.py
+lockserver.py 
+fileServer.py 
+authentication.py
 
-
+Then we have to execute client.py and follow further instructions.
