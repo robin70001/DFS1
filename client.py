@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import requests
+import shelve
 from requests.auth import HTTPBasicAuth
 # =============================================================================
 # url = "http://localhost:8080/D:/scalab/SC1/test1.txt"
@@ -22,7 +23,7 @@ if inp_a == "a":
   if auth1.text == "Not Authorized!":
     print("Sorry "+auth1.text )
   else:
-    inp = input("enter")
+    print(auth1.text)
     menu = input("1.Read File / 2.Write file : ")
     if menu == '1':
       filename = input("Enter File Name: ")
@@ -70,5 +71,13 @@ if inp_a == "a":
         print("The file is currenly locked by another user")
 
 elif inp_a == "b":
-  print("Enter USername:")
-  print("Enter Password:")
+  user1 = input("Enter USername:")
+  pass1 = input("Enter Password:")
+  try:
+    shelve1 = shelve.open("login.dat")
+    shelve1[user1] = (pass1)
+  except:
+    shelve1.close()
+      
+  
+  
